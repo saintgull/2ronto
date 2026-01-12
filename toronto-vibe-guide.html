@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toronto Vibe Guide | 2ronto.ca</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --isabelline: #f8f4f2;
+            --eerie-black: #1c1c1c;
+            --ultra-violet: #53599a;
+            --viridian: #6a8e7f;
+            --blush: #da627d;
+            --sandy: #e8c77b;
+            --soft-blue: #7eb8da;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--isabelline);
+            color: var(--eerie-black);
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--ultra-violet), var(--viridian));
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .intro {
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        .intro h2 {
+            color: var(--ultra-violet);
+            margin-bottom: 1rem;
+        }
+
+        .filter-bar {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--ultra-violet);
+            background: white;
+            color: var(--ultra-violet);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--ultra-violet);
+            color: white;
+        }
+
+        .neighborhoods {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+
+        .neighborhood-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .neighborhood-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .card-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .card-image::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60%;
+            background: linear-gradient(transparent, rgba(0,0,0,0.6));
+        }
+
+        .card-title {
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            z-index: 1;
+        }
+
+        .card-tagline {
+            position: absolute;
+            bottom: 0.5rem;
+            left: 1rem;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+            z-index: 1;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-description {
+            color: #666;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .vibe-section {
+            margin-bottom: 1rem;
+        }
+
+        .vibe-section h4 {
+            color: var(--ultra-violet);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.75rem;
+        }
+
+        .vibe-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .vibe-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .vibe-label {
+            width: 80px;
+            font-size: 0.75rem;
+            color: #888;
+        }
+
+        .vibe-track {
+            flex: 1;
+            height: 6px;
+            background: #eee;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .vibe-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .vibe-fill.energy { background: var(--blush); }
+        .vibe-fill.culture { background: var(--ultra-violet); }
+        .vibe-fill.warmth { background: var(--sandy); }
+        .vibe-fill.grit { background: #8b7355; }
+        .vibe-fill.artsy { background: var(--viridian); }
+        .vibe-fill.family { background: var(--soft-blue); }
+
+        .vibe-value {
+            width: 30px;
+            font-size: 0.75rem;
+            color: #666;
+            text-align: right;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .tag {
+            padding: 0.25rem 0.75rem;
+            background: var(--isabelline);
+            border-radius: 12px;
+            font-size: 0.75rem;
+            color: #666;
+        }
+
+        .signature-quote {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, rgba(83,89,154,0.05), rgba(106,142,127,0.05));
+            border-left: 3px solid var(--ultra-violet);
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+            color: #555;
+        }
+
+        footer {
+            background: var(--eerie-black);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        footer a {
+            color: var(--viridian);
+        }
+
+        .methodology {
+            max-width: 800px;
+            margin: 4rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+        }
+
+        .methodology h3 {
+            color: var(--ultra-violet);
+            margin-bottom: 1rem;
+        }
+
+        .methodology p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .neighborhoods {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Toronto Vibe Guide</h1>
+        <p>Every neighborhood has a feeling. We mapped them using the Vibe Engine &mdash; a system for quantifying the ineffable qualities that make a place feel like itself.</p>
+    </header>
+
+    <section class="intro">
+        <h2>What is a "Vibe"?</h2>
+        <p>A vibe is the sum total of a place's energy, history, architecture, people, sounds, and rhythms. It's what you feel when you step off the streetcar and know immediately where you are. Toronto's 140+ neighborhoods each carry their own signature &mdash; and we've analyzed them across six key dimensions.</p>
+    </section>
+
+    <div class="filter-bar">
+        <button class="filter-btn active" data-filter="all">All Neighborhoods</button>
+        <button class="filter-btn" data-filter="artsy">Artsy</button>
+        <button class="filter-btn" data-filter="family">Family-Friendly</button>
+        <button class="filter-btn" data-filter="nightlife">Nightlife</button>
+        <button class="filter-btn" data-filter="historic">Historic</button>
+        <button class="filter-btn" data-filter="emerging">Emerging</button>
+        <button class="filter-btn" data-filter="diverse">Diverse</button>
+    </div>
+
+    <main class="neighborhoods">
+
+        <!-- Kensington Market -->
+        <article class="neighborhood-card" data-tags="artsy diverse historic">
+            <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1569959220744-ff553533f492?w=800'); background-color: #8b7355;">
+                <h3 class="card-title">Kensington Market</h3>
+                <span class="card-tagline">Bohemian Soul</span>
+            </div>
+            <div class="card-content">
+                <p class="card-description">Toronto's most unique neighbourhood retains its charm through an eclectic mix of vintage clothing stores, grocers, restaurants and cafes. A designated National Historic Site since 2006, it's evolved from a Jewish immigrant market to today's multicultural bazaar while fiercely resisting gentrification.</p>
+
+                <div class="vibe-section">
+                    <h4>Vibe Profile</h4>
+                    <div class="vibe-bars">
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Energy</span>
+                            <div class="vibe-track"><div class="vibe-fill energy" style="width: 75%"></div></div>
+                            <span class="vibe-value">7.5</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Culture</span>
+                            <div class="vibe-track"><div class="vibe-fill culture" style="width: 95%"></div></div>
+                            <span class="vibe-value">9.5</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Warmth</span>
+                            <div class="vibe-track"><div class="vibe-fill warmth" style="width: 85%"></div></div>
+                            <span class="vibe-value">8.5</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Grit</span>
+                            <div class="vibe-track"><div class="vibe-fill grit" style="width: 80%"></div></div>
+                            <span class="vibe-value">8.0</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Artsy</span>
+                            <div class="vibe-track"><div class="vibe-fill artsy" style="width: 90%"></div></div>
+                            <span class="vibe-value">9.0</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Family</span>
+                            <div class="vibe-track"><div class="vibe-fill family" style="width: 55%"></div></div>
+                            <span class="vibe-value">5.5</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tags">
+                    <span class="tag">Vintage</span>
+                    <span class="tag">Multicultural</span>
+                    <span class="tag">Pedestrian Sundays</span>
+                    <span class="tag">Thrifting</span>
+                </div>
+
+                <div class="signature-quote">"This is a caring community that has managed to stave off total gentrification. Whenever I return, I instantly start to breathe easy again." &mdash; Sook-Yin Lee</div>
+            </div>
+        </article>
+
+        <!-- The Junction -->
+        <article class="neighborhood-card" data-tags="artsy nightlife emerging">
+            <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=800'); background-color: #6a8e7f;">
+                <h3 class="card-title">The Junction</h3>
+                <span class="card-tagline">Creative Revival</span>
+            </div>
+            <div class="card-content">
+                <p class="card-description">Named for the intersection where four railway lines meet, this former independent city has boomed since ending prohibition in 1997. Once its own municipality with early factories, it's now home to MOCA, eight galleries, craft breweries, and Time Out's designation as one of the 50 coolest neighbourhoods in the world.</p>
+
+                <div class="vibe-section">
+                    <h4>Vibe Profile</h4>
+                    <div class="vibe-bars">
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Energy</span>
+                            <div class="vibe-track"><div class="vibe-fill energy" style="width: 80%"></div></div>
+                            <span class="vibe-value">8.0</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Culture</span>
+                            <div class="vibe-track"><div class="vibe-fill culture" style="width: 85%"></div></div>
+                            <span class="vibe-value">8.5</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Warmth</span>
+                            <div class="vibe-track"><div class="vibe-fill warmth" style="width: 70%"></div></div>
+                            <span class="vibe-value">7.0</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Grit</span>
+                            <div class="vibe-track"><div class="vibe-fill grit" style="width: 60%"></div></div>
+                            <span class="vibe-value">6.0</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Artsy</span>
+                            <div class="vibe-track"><div class="vibe-fill artsy" style="width: 95%"></div></div>
+                            <span class="vibe-value">9.5</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Family</span>
+                            <div class="vibe-track"><div class="vibe-fill family" style="width: 65%"></div></div>
+                            <span class="vibe-value">6.5</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tags">
+                    <span class="tag">MOCA</span>
+                    <span class="tag">Craft Beer</span>
+                    <span class="tag">Century Homes</span>
+                    <span class="tag">Galleries</span>
+                </div>
+
+                <div class="signature-quote">"A neighbourhood that has finally arrived &mdash; home to Toronto's contemporary art scene and Summer Solstice Festival."</div>
+            </div>
+        </article>
+
+        <!-- Parkdale -->
+        <article class="neighborhood-card" data-tags="diverse artsy nightlife">
+            <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1516738901171-8eb4fc13bd20?w=800'); background-color: #da627d;">
+                <h3 class="card-title">Parkdale</h3>
+                <span class="card-tagline">Defiant Diversity</span>
+            </div>
+            <div class="card-content">
+                <p class="card-description">Once Toronto's most desirable address in 1878, now home to the largest Tibetan diaspora outside India/Nepal. Victorian mansions sit beside high-rises in this fiercely activist community that's been on the cusp of gentrification for decades while resisting corporate takeover. City grit meets village charm.</p>
+
+                <div class="vibe-section">
+                    <h4>Vibe Profile</h4>
+                    <div class="vibe-bars">
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Energy</span>
+                            <div class="vibe-track"><div class="vibe-fill energy" style="width: 70%"></div></div>
+                            <span class="vibe-value">7.0</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Culture</span>
+                            <div class="vibe-track"><div class="vibe-fill culture" style="width: 90%"></div></div>
+                            <span class="vibe-value">9.0</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Warmth</span>
+                            <div class="vibe-track"><div class="vibe-fill warmth" style="width: 75%"></div></div>
+                            <span class="vibe-value">7.5</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Grit</span>
+                            <div class="vibe-track"><div class="vibe-fill grit" style="width: 90%"></div></div>
+                            <span class="vibe-value">9.0</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Artsy</span>
+                            <div class="vibe-track"><div class="vibe-fill artsy" style="width: 80%"></div></div>
+                            <span class="vibe-value">8.0</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Family</span>
+                            <div class="vibe-track"><div class="vibe-fill family" style="width: 50%"></div></div>
+                            <span class="vibe-value">5.0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tags">
+                    <span class="tag">Tibetan</span>
+                    <span class="tag">Victorian</span>
+                    <span class="tag">Activism</span>
+                    <span class="tag">Vintage</span>
+                </div>
+
+                <div class="signature-quote">"The combination of city grit with village charms is unique to the area. Eclectic, artsy, and entrepreneurial."</div>
+            </div>
+        </article>
+
+        <!-- Leslieville -->
+        <article class="neighborhood-card" data-tags="family artsy emerging">
+            <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800'); background-color: #7eb8da;">
+                <h3 class="card-title">Leslieville</h3>
+                <span class="card-tagline">Hipster Families</span>
+            </div>
+            <div class="card-content">
+                <p class="card-description">Once hailed by the NY Times as "the next Williamsburg," this former industrial district transformed rapidly between 2000-2010. Named after nursery owner George Leslie, it's now where yoga bags hang off fit arms, running groups stop at Te Aro cafe, and families browse the farmer's market. They take their kale seriously here.</p>
+
+                <div class="vibe-section">
+                    <h4>Vibe Profile</h4>
+                    <div class="vibe-bars">
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Energy</span>
+                            <div class="vibe-track"><div class="vibe-fill energy" style="width: 65%"></div></div>
+                            <span class="vibe-value">6.5</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Culture</span>
+                            <div class="vibe-track"><div class="vibe-fill culture" style="width: 70%"></div></div>
+                            <span class="vibe-value">7.0</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Warmth</span>
+                            <div class="vibe-track"><div class="vibe-fill warmth" style="width: 80%"></div></div>
+                            <span class="vibe-value">8.0</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Grit</span>
+                            <div class="vibe-track"><div class="vibe-fill grit" style="width: 35%"></div></div>
+                            <span class="vibe-value">3.5</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Artsy</span>
+                            <div class="vibe-track"><div class="vibe-fill artsy" style="width: 75%"></div></div>
+                            <span class="vibe-value">7.5</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Family</span>
+                            <div class="vibe-track"><div class="vibe-fill family" style="width: 90%"></div></div>
+                            <span class="vibe-value">9.0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tags">
+                    <span class="tag">Brunch</span>
+                    <span class="tag">Strollers</span>
+                    <span class="tag">Farmer's Market</span>
+                    <span class="tag">Creative</span>
+                </div>
+
+                <div class="signature-quote">"The atmosphere is fairly laid back, perfect for unwinding with weekend strolls after a long week in the office."</div>
+            </div>
+        </article>
+
+        <!-- Yorkville -->
+        <article class="neighborhood-card" data-tags="historic">
+            <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800'); background-color: #e8c77b;">
+                <h3 class="card-title">Yorkville</h3>
+                <span class="card-tagline">Polished Luxury</span>
+            </div>
+            <div class="card-content">
+                <p class="card-description">From 1960s bohemian enclave where Joni Mitchell played coffee houses to Canada's most prestigious shopping district &mdash; the "Mink Mile" on Bloor West hosts Gucci, Prada, Hermès. Yet slip onto the side streets and you'll find a village-like vibe, except this village has Lamborghinis and Manolo Blahniks.</p>
+
+                <div class="vibe-section">
+                    <h4>Vibe Profile</h4>
+                    <div class="vibe-bars">
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Energy</span>
+                            <div class="vibe-track"><div class="vibe-fill energy" style="width: 70%"></div></div>
+                            <span class="vibe-value">7.0</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Culture</span>
+                            <div class="vibe-track"><div class="vibe-fill culture" style="width: 60%"></div></div>
+                            <span class="vibe-value">6.0</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Warmth</span>
+                            <div class="vibe-track"><div class="vibe-fill warmth" style="width: 45%"></div></div>
+                            <span class="vibe-value">4.5</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Grit</span>
+                            <div class="vibe-track"><div class="vibe-fill grit" style="width: 10%"></div></div>
+                            <span class="vibe-value">1.0</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Artsy</span>
+                            <div class="vibe-track"><div class="vibe-fill artsy" style="width: 40%"></div></div>
+                            <span class="vibe-value">4.0</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Family</span>
+                            <div class="vibe-track"><div class="vibe-fill family" style="width: 30%"></div></div>
+                            <span class="vibe-value">3.0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tags">
+                    <span class="tag">Luxury</span>
+                    <span class="tag">Designer</span>
+                    <span class="tag">Mink Mile</span>
+                    <span class="tag">Five-Star</span>
+                </div>
+
+                <div class="signature-quote">"The heart of the neighbourhood is nestled away on the side streets &mdash; a peaceful, village-like vibe replete with Lamborghinis."</div>
+            </div>
+        </article>
+
+        <!-- Ossington -->
+        <article class="neighborhood-card" data-tags="nightlife artsy">
+            <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=800'); background-color: #53599a;">
+                <h3 class="card-title">Ossington</h3>
+                <span class="card-tagline">After Dark</span>
+            </div>
+            <div class="card-content">
+                <p class="card-description">South Ossington transformed from neglected stretch to Toronto's best three blocks for drinking and dining. Sweaty Betty's horror-themed dive bar, Bellwoods Brewery's perpetual patio line, secret speakeasies behind barber shops, and The Dakota Tavern's whiskey-soaked bluegrass &mdash; this is where Toronto comes alive at night.</p>
+
+                <div class="vibe-section">
+                    <h4>Vibe Profile</h4>
+                    <div class="vibe-bars">
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Energy</span>
+                            <div class="vibe-track"><div class="vibe-fill energy" style="width: 90%"></div></div>
+                            <span class="vibe-value">9.0</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Culture</span>
+                            <div class="vibe-track"><div class="vibe-fill culture" style="width: 75%"></div></div>
+                            <span class="vibe-value">7.5</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Warmth</span>
+                            <div class="vibe-track"><div class="vibe-fill warmth" style="width: 65%"></div></div>
+                            <span class="vibe-value">6.5</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Grit</span>
+                            <div class="vibe-track"><div class="vibe-fill grit" style="width: 70%"></div></div>
+                            <span class="vibe-value">7.0</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Artsy</span>
+                            <div class="vibe-track"><div class="vibe-fill artsy" style="width: 70%"></div></div>
+                            <span class="vibe-value">7.0</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Family</span>
+                            <div class="vibe-track"><div class="vibe-fill family" style="width: 20%"></div></div>
+                            <span class="vibe-value">2.0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tags">
+                    <span class="tag">Cocktails</span>
+                    <span class="tag">Craft Beer</span>
+                    <span class="tag">Live Music</span>
+                    <span class="tag">OssFest</span>
+                </div>
+
+                <div class="signature-quote">"The influx of bars, restaurants and boutiques has transformed this stretch into Toronto's best three blocks for drinking and dining."</div>
+            </div>
+        </article>
+
+        <!-- Roncesvalles -->
+        <article class="neighborhood-card" data-tags="family historic diverse">
+            <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=800'); background-color: #6a8e7f;">
+                <h3 class="card-title">Roncesvalles</h3>
+                <span class="card-tagline">Little Poland</span>
+            </div>
+            <div class="card-content">
+                <p class="card-description">Toronto's Little Poland since post-WWII Eastern European immigration. "Mówimy po polsku" (We speak Polish) still hangs in storefronts. The annual Roncesvalles Polish Festival draws 300,000+ &mdash; North America's largest celebration of Polish culture. Now beloved by young families, though rising rents threaten heritage bakeries like Staropolska.</p>
+
+                <div class="vibe-section">
+                    <h4>Vibe Profile</h4>
+                    <div class="vibe-bars">
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Energy</span>
+                            <div class="vibe-track"><div class="vibe-fill energy" style="width: 55%"></div></div>
+                            <span class="vibe-value">5.5</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Culture</span>
+                            <div class="vibe-track"><div class="vibe-fill culture" style="width: 85%"></div></div>
+                            <span class="vibe-value">8.5</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Warmth</span>
+                            <div class="vibe-track"><div class="vibe-fill warmth" style="width: 90%"></div></div>
+                            <span class="vibe-value">9.0</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Grit</span>
+                            <div class="vibe-track"><div class="vibe-fill grit" style="width: 40%"></div></div>
+                            <span class="vibe-value">4.0</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Artsy</span>
+                            <div class="vibe-track"><div class="vibe-fill artsy" style="width: 50%"></div></div>
+                            <span class="vibe-value">5.0</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Family</span>
+                            <div class="vibe-track"><div class="vibe-fill family" style="width: 95%"></div></div>
+                            <span class="vibe-value">9.5</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tags">
+                    <span class="tag">Polish</span>
+                    <span class="tag">Bakeries</span>
+                    <span class="tag">High Park</span>
+                    <span class="tag">Heritage</span>
+                </div>
+
+                <div class="signature-quote">"Polish immigrants played an instrumental role in its expansion, building banks, churches and local establishments, many of which still stand today."</div>
+            </div>
+        </article>
+
+        <!-- West Queen West -->
+        <article class="neighborhood-card" data-tags="artsy nightlife">
+            <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1499781350541-7783f6c6a0c8?w=800'); background-color: #da627d;">
+                <h3 class="card-title">West Queen West</h3>
+                <span class="card-tagline">Art + Design District</span>
+            </div>
+            <div class="card-content">
+                <p class="card-description">Named by Vogue as one of the coolest streets in the world, officially designated the Art + Design District with Toronto's largest concentration of galleries. The annual West Queen West Art Crawl opens 10 galleries for free evening wandering. Street murals brighten alleyways; striking art fills boutique windows.</p>
+
+                <div class="vibe-section">
+                    <h4>Vibe Profile</h4>
+                    <div class="vibe-bars">
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Energy</span>
+                            <div class="vibe-track"><div class="vibe-fill energy" style="width: 85%"></div></div>
+                            <span class="vibe-value">8.5</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Culture</span>
+                            <div class="vibe-track"><div class="vibe-fill culture" style="width: 90%"></div></div>
+                            <span class="vibe-value">9.0</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Warmth</span>
+                            <div class="vibe-track"><div class="vibe-fill warmth" style="width: 60%"></div></div>
+                            <span class="vibe-value">6.0</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Grit</span>
+                            <div class="vibe-track"><div class="vibe-fill grit" style="width: 65%"></div></div>
+                            <span class="vibe-value">6.5</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Artsy</span>
+                            <div class="vibe-track"><div class="vibe-fill artsy" style="width: 98%"></div></div>
+                            <span class="vibe-value">9.8</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Family</span>
+                            <div class="vibe-track"><div class="vibe-fill family" style="width: 35%"></div></div>
+                            <span class="vibe-value">3.5</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tags">
+                    <span class="tag">Galleries</span>
+                    <span class="tag">Street Art</span>
+                    <span class="tag">Boutiques</span>
+                    <span class="tag">Trinity Bellwoods</span>
+                </div>
+
+                <div class="signature-quote">"Art galleries are the vanguard of emerging Toronto neighbourhoods &mdash; and West Queen West has 13 of them."</div>
+            </div>
+        </article>
+
+        <!-- The Danforth / Greektown -->
+        <article class="neighborhood-card" data-tags="diverse family historic">
+            <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800'); background-color: #7eb8da;">
+                <h3 class="card-title">The Danforth</h3>
+                <span class="card-tagline">Greektown</span>
+            </div>
+            <div class="card-content">
+                <p class="card-description">Once called "Little Athens" with 65,000 Greeks in the vicinity, still one of North America's largest Greek communities. Street signs in English and Greek. The Danforth Music Hall (1919) still operates. Juggles east-enders' enviro-chic, vegan-friendly sensibilities with the city's biggest celebration of meat on a skewer.</p>
+
+                <div class="vibe-section">
+                    <h4>Vibe Profile</h4>
+                    <div class="vibe-bars">
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Energy</span>
+                            <div class="vibe-track"><div class="vibe-fill energy" style="width: 70%"></div></div>
+                            <span class="vibe-value">7.0</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Culture</span>
+                            <div class="vibe-track"><div class="vibe-fill culture" style="width: 85%"></div></div>
+                            <span class="vibe-value">8.5</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Warmth</span>
+                            <div class="vibe-track"><div class="vibe-fill warmth" style="width: 85%"></div></div>
+                            <span class="vibe-value">8.5</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Grit</span>
+                            <div class="vibe-track"><div class="vibe-fill grit" style="width: 45%"></div></div>
+                            <span class="vibe-value">4.5</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Artsy</span>
+                            <div class="vibe-track"><div class="vibe-fill artsy" style="width: 55%"></div></div>
+                            <span class="vibe-value">5.5</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Family</span>
+                            <div class="vibe-track"><div class="vibe-fill family" style="width: 80%"></div></div>
+                            <span class="vibe-value">8.0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tags">
+                    <span class="tag">Greek</span>
+                    <span class="tag">Souvlaki</span>
+                    <span class="tag">Live Music</span>
+                    <span class="tag">Diverse</span>
+                </div>
+
+                <div class="signature-quote">"One of the highest concentrations of restaurants per kilometre in the world. 111 different ethnic origins, 33% first-generation immigrants."</div>
+            </div>
+        </article>
+
+        <!-- Little Italy -->
+        <article class="neighborhood-card" data-tags="nightlife diverse historic">
+            <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800'); background-color: #e8c77b;">
+                <h3 class="card-title">Little Italy</h3>
+                <span class="card-tagline">College Street Nights</span>
+            </div>
+            <div class="card-content">
+                <p class="card-description">Toronto's first designated Italian neighborhood since the 1920s when Italians moved west from The Ward. Now a multicultural melting pot &mdash; Portuguese, Chinese, Vietnamese &mdash; with its original character preserved in Victorian architecture. Café Diplomatico revolutionized outdoor dining when it opened in 1968. Popular for bar crawls and late-night eats.</p>
+
+                <div class="vibe-section">
+                    <h4>Vibe Profile</h4>
+                    <div class="vibe-bars">
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Energy</span>
+                            <div class="vibe-track"><div class="vibe-fill energy" style="width: 80%"></div></div>
+                            <span class="vibe-value">8.0</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Culture</span>
+                            <div class="vibe-track"><div class="vibe-fill culture" style="width: 80%"></div></div>
+                            <span class="vibe-value">8.0</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Warmth</span>
+                            <div class="vibe-track"><div class="vibe-fill warmth" style="width: 80%"></div></div>
+                            <span class="vibe-value">8.0</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Grit</span>
+                            <div class="vibe-track"><div class="vibe-fill grit" style="width: 50%"></div></div>
+                            <span class="vibe-value">5.0</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Artsy</span>
+                            <div class="vibe-track"><div class="vibe-fill artsy" style="width: 60%"></div></div>
+                            <span class="vibe-value">6.0</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Family</span>
+                            <div class="vibe-track"><div class="vibe-fill family" style="width: 50%"></div></div>
+                            <span class="vibe-value">5.0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tags">
+                    <span class="tag">Patios</span>
+                    <span class="tag">Gelato</span>
+                    <span class="tag">Comedy</span>
+                    <span class="tag">Late Night</span>
+                </div>
+
+                <div class="signature-quote">"The neighbourhood to go for pizza and pasta, but also a diverse food scene and popular option for a bar crawl."</div>
+            </div>
+        </article>
+
+        <!-- Distillery District -->
+        <article class="neighborhood-card" data-tags="historic artsy">
+            <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?w=800'); background-color: #8b7355;">
+                <h3 class="card-title">Distillery District</h3>
+                <span class="card-tagline">Victorian Industrial</span>
+            </div>
+            <div class="card-content">
+                <p class="card-description">North America's largest collection of Victorian-era industrial architecture across 13 acres. Once the world's largest distillery (Gooderham & Worts, 1832), now a pedestrian-only zone with 22 galleries, 25 boutiques, and 1,700+ film/TV productions. The brick-paved streets are perpetually Insta-worthy.</p>
+
+                <div class="vibe-section">
+                    <h4>Vibe Profile</h4>
+                    <div class="vibe-bars">
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Energy</span>
+                            <div class="vibe-track"><div class="vibe-fill energy" style="width: 60%"></div></div>
+                            <span class="vibe-value">6.0</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Culture</span>
+                            <div class="vibe-track"><div class="vibe-fill culture" style="width: 85%"></div></div>
+                            <span class="vibe-value">8.5</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Warmth</span>
+                            <div class="vibe-track"><div class="vibe-fill warmth" style="width: 70%"></div></div>
+                            <span class="vibe-value">7.0</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Grit</span>
+                            <div class="vibe-track"><div class="vibe-fill grit" style="width: 55%"></div></div>
+                            <span class="vibe-value">5.5</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Artsy</span>
+                            <div class="vibe-track"><div class="vibe-fill artsy" style="width: 80%"></div></div>
+                            <span class="vibe-value">8.0</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Family</span>
+                            <div class="vibe-track"><div class="vibe-fill family" style="width: 60%"></div></div>
+                            <span class="vibe-value">6.0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tags">
+                    <span class="tag">Heritage</span>
+                    <span class="tag">Pedestrian</span>
+                    <span class="tag">Christmas Market</span>
+                    <span class="tag">Film Location</span>
+                </div>
+
+                <div class="signature-quote">"Toronto's go-to spot for great restaurants, unique boutiques, art, theatre &mdash; and countless Insta-worthy moments in the old-world streetscapes."</div>
+            </div>
+        </article>
+
+        <!-- Davenport -->
+        <article class="neighborhood-card" data-tags="emerging">
+            <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800'); background-color: #6a8e7f;">
+                <h3 class="card-title">Davenport</h3>
+                <span class="card-tagline">World's Coolest 2025</span>
+            </div>
+            <div class="card-content">
+                <p class="card-description">Time Out named Davenport one of the 39 coolest neighbourhoods in the world for 2025. Once giving off industrial vibes with garages and factories, it's transformed into a vibrant little community with trendy cafés, buzzing patios during summer, and breweries that draw crowds by night.</p>
+
+                <div class="vibe-section">
+                    <h4>Vibe Profile</h4>
+                    <div class="vibe-bars">
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Energy</span>
+                            <div class="vibe-track"><div class="vibe-fill energy" style="width: 75%"></div></div>
+                            <span class="vibe-value">7.5</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Culture</span>
+                            <div class="vibe-track"><div class="vibe-fill culture" style="width: 70%"></div></div>
+                            <span class="vibe-value">7.0</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Warmth</span>
+                            <div class="vibe-track"><div class="vibe-fill warmth" style="width: 75%"></div></div>
+                            <span class="vibe-value">7.5</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Grit</span>
+                            <div class="vibe-track"><div class="vibe-fill grit" style="width: 55%"></div></div>
+                            <span class="vibe-value">5.5</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Artsy</span>
+                            <div class="vibe-track"><div class="vibe-fill artsy" style="width: 65%"></div></div>
+                            <span class="vibe-value">6.5</span>
+                        </div>
+                        <div class="vibe-bar">
+                            <span class="vibe-label">Family</span>
+                            <div class="vibe-track"><div class="vibe-fill family" style="width: 55%"></div></div>
+                            <span class="vibe-value">5.5</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tags">
+                    <span class="tag">Emerging</span>
+                    <span class="tag">Breweries</span>
+                    <span class="tag">Patios</span>
+                    <span class="tag">Time Out 2025</span>
+                </div>
+
+                <div class="signature-quote">"A former retail wasteland transformed into a vibrant little community &mdash; now one of the world's coolest."</div>
+            </div>
+        </article>
+
+    </main>
+
+    <section class="methodology">
+        <h3>How We Mapped the Vibes</h3>
+        <p>The Toronto Vibe Guide uses the <strong>Vibe Engine</strong> &mdash; a systematic framework for analyzing the ineffable qualities that make a place feel like itself. We collected descriptions from BlogTO, Toronto Life's Neighbourhood Crawl series, The Local, Spacing Magazine, and local Substacks, then processed them through our 22-dimension taxonomy.</p>
+        <p>For this guide, we distilled those dimensions into six key axes:</p>
+        <ul style="margin-left: 1.5rem; margin-top: 0.5rem; color: #666;">
+            <li><strong>Energy:</strong> How buzzing vs. chill is the street?</li>
+            <li><strong>Culture:</strong> Depth of cultural identity and diversity</li>
+            <li><strong>Warmth:</strong> Community connection and welcoming feeling</li>
+            <li><strong>Grit:</strong> Raw, unpolished urban texture</li>
+            <li><strong>Artsy:</strong> Creative and artistic presence</li>
+            <li><strong>Family:</strong> Kid-friendliness and domestic vibe</li>
+        </ul>
+        <p style="margin-top: 1rem;">Future versions will incorporate image analysis using Claude's vision capabilities to assess street photography, storefront aesthetics, and architectural character.</p>
+    </section>
+
+    <footer>
+        <p>Part of <a href="/">2ronto.ca</a> &mdash; A guide for people moving to Toronto</p>
+        <p style="margin-top: 0.5rem; opacity: 0.7;">Vibe data from BlogTO, Toronto Life, The Local, Spacing Magazine, and local Substacks</p>
+        <p style="margin-top: 0.5rem; opacity: 0.7;">Powered by the <a href="#">Vibe Engine</a></p>
+    </footer>
+
+    <script>
+        // Filter functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Update active button
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const filter = btn.dataset.filter;
+
+                document.querySelectorAll('.neighborhood-card').forEach(card => {
+                    if (filter === 'all') {
+                        card.style.display = 'block';
+                    } else {
+                        const tags = card.dataset.tags || '';
+                        card.style.display = tags.includes(filter) ? 'block' : 'none';
+                    }
+                });
+            });
+        });
+
+        // Animate vibe bars on scroll
+        const observerOptions = {
+            threshold: 0.2
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.querySelectorAll('.vibe-fill').forEach(bar => {
+                        const width = bar.style.width;
+                        bar.style.width = '0%';
+                        setTimeout(() => {
+                            bar.style.width = width;
+                        }, 100);
+                    });
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.neighborhood-card').forEach(card => {
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
